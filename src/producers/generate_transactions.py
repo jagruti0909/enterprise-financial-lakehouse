@@ -1,8 +1,9 @@
 import json
 import random
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
+
 from faker import Faker
 
 fake = Faker()
@@ -17,7 +18,7 @@ TXN_TYPES = ["PURCHASE", "TRANSFER", "WITHDRAWAL", "REFUND"]
 def generate_record(record_type="valid"):
     txn_id = str(uuid.uuid4())
     account_id = f"ACC-{random.randint(10000, 99999)}"
-    timestamp = datetime.now(timezone.utc).isoformat()
+    timestamp = datetime.now(UTC).isoformat()
 
     if record_type == "valid":
         return {
@@ -75,8 +76,7 @@ def generate_batch(batch_id: int, total_records: int = 500):
 
     filename = OUTPUT_DIR / f"transactions_batch_{batch_id}_{int(datetime.now().timestamp())}.json"
     with open(filename, "w") as f:
-        for rec in records:
-            f.write(json.dumps(rec) + "\n")
+        f.writelines(json.dumps(rec) + "\n" for rec in records)
     print(f"Generated {total_records} records to {filename}")
 
 

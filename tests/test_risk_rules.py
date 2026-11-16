@@ -1,5 +1,6 @@
 from src.transformations.risk_rules import calculate_risk_score
 
+
 def test_low_risk_standard_transaction():
     score, tier = calculate_risk_score(
         is_suspicious_flag=False,
